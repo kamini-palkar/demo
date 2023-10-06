@@ -8,8 +8,12 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
 use App\Exports\ProductExport;
 use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
 use PDF;
+use Symfony\Component\HttpFoundation\Response;
+use App\Image;
 
 class ProductController extends Controller
 {
@@ -18,23 +22,28 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+   
     public function index(Request $request)
     {
+ 
         if ($request->ajax()) {
   
             $data = Product::latest()->get();
   
             return Datatables::of($data)
                     ->addIndexColumn()
+                    ->addColumn('image', function ($product) {
+                        return '<img src="' . $product->image . '" width="100" height="100">';
+                    })
                     ->addColumn('action', function($row){
    
-                           $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editProduct">Edit</a>';
+                           $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class=" editProduct"><i class="fa fa-edit" style="font-size:24px"></i></a>';
    
-                           $btn = $btn.' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteProduct">Delete</a>';
+                           $btn = $btn.' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" class=" deleteProduct"><i class="fa fa-trash-o" style="font-size:24px;color:red"></a>';
     
                             return $btn;
                     })
-                    ->rawColumns(['action'])
+                    ->rawColumns(['image','action'])
                     ->make(true);
         }
         
@@ -77,8 +86,7 @@ class ProductController extends Controller
             return response()->json(['errors'=>$validator->errors()->all()]);
         }
        
-        $fileName = time() . '.' . $request->image->extension();
-        $request->image->storeAs('public/images', $fileName);
+      
         Product::updateOrCreate([
           
             'id' => $request->product_id
@@ -88,7 +96,7 @@ class ProductController extends Controller
             'name' => $request->name, 
             'price' => $request->price,
             'details' => $request->details,
-            'image' => $request->$fileName ,
+           
         ]);        
 
         return response()->json(['success'=>'Product saved successfully.']);
@@ -137,7 +145,10 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
+
+
         Product::find($id)->delete();
+        
      
         return response()->json(['success'=>'Product deleted successfully.']);
     }
@@ -170,4 +181,11 @@ class ProductController extends Controller
     return $pdf->setPaper('a4')->stream();
 
    }
+   public function exportCSVFile() 
+   {
+    //    return (new ProductExport)->download('product.csv', \Maatwebsite\Excel\Excel::CSV);
+    return Excel::download(new ProductExport, 'product.csv.csv');
+
+
+   } 
 }

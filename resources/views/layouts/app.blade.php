@@ -21,7 +21,7 @@
     <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" >
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 
     <!-- Styles -->
@@ -113,6 +113,7 @@
                 {data:'price',name:'price'},
                 {data:'details',name:'details'},
                 // {data:'image',name:'image'},
+                // { data: 'image', name: 'image', sortable: false, searchable: false },
                 {data: 'action', name: 'action', orderable: false, searchable: false},
             ]
         });
@@ -138,20 +139,27 @@
             })
         });
 
+
         $('#saveBtn').click(function (e) {
             e.preventDefault();
             $(this).html('Sending..');
+            // var datav=$('#productForm').serialize();
+           
+            // alert(datav);
         
             $.ajax({
                 data: $('#productForm').serialize(),
-                url: "{{ route('product.store') }}",
+                url: "{{ url('product.store')}}",
                 type: "POST",
-                dataType: 'json',
+                cache: false,
+                contentType: false,
+                processData: false,
                 success: function (data) {
                     if(data.errors)
                         {
                             printErrorMsg(data.errors); 
                             // location.reload();
+                            alert(data.errors);
                           
                         }
                         else{
@@ -159,6 +167,7 @@
                             $(".print-error-msg").css('display','none');
                             $('#ajaxModel').modal('hide');
                             table.draw();
+                            alert("done");
 
                         }
                    
@@ -166,10 +175,16 @@
                 error: function (data) {
                     console.log('Error:', data);
                     $('#saveBtn').html('Save Changes');
+                    alert(2);
                 }
 
             });
         });
+
+
+
+
+      
         function printErrorMsg (msg) {
         $(".print-error-msg").find("ul").html('');
         $(".print-error-msg").css('display','block');
@@ -187,6 +202,8 @@
                     url: "{{ route('product.store') }}"+'/'+product_id,
                     success: function (data) {
                         table.draw();
+
+
                     },
                     error: function (data) {
                         console.log('Error:', data);
@@ -197,6 +214,34 @@
             }
         });
     });
+
+
+    $(document).ready(function() {
+       $('#exportButton').click(function() {
+           fetch('/export', { //This line uses the fetch API to make a GET request to the "/export" URL on your server. It starts the process of requesting data from the server.                    method: 'GET',
+                    headers: {                       
+                        'Content-Type': 'application/json',                  
+                      },
+               })
+                .then((response) => response.blob())
+                .then((blob) => {
+                    // Create a blob URL and trigger download
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'product.xlsx';
+                  document.body.appendChild(a);
+                   a.click();
+                   window.URL.revokeObjectURL(url);
+               })
+                .catch((error) => {
+                   console.error('Export failed:', error);
+                   alert('Export failed.');
+                });
+
+        });
+   });
+
 </script>
 
 

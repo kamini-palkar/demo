@@ -38,7 +38,7 @@ tr:nth-child(even) {
                 
               </tr>
             
-              @endforeach 
+   @endforeach 
 </table>
 
 </body>
