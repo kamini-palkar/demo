@@ -16,10 +16,12 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
     <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
-    <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <!-- <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" >
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -67,6 +69,11 @@
                                 </li>
                             @endif
                         @else
+                        <li><a class="nav-link" href="{{ route('users.index') }}">Manage Users</a></li>
+                        
+                            <li><a class="nav-link" href="{{ route('roles.index') }}">Manage Role</a></li>
+                            <li><a class="nav-link" href="{{ route('permissions.index') }}">Manage Permission</a></li>
+                            <li><a class="nav-link" href="{{ route('products.index') }}">Manage Product</a></li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }}
@@ -112,8 +119,7 @@
                 {data:'name',name:'name'},
                 {data:'price',name:'price'},
                 {data:'details',name:'details'},
-                // {data:'image',name:'image'},
-                // { data: 'image', name: 'image', sortable: false, searchable: false },
+       
                 {data: 'action', name: 'action', orderable: false, searchable: false},
             ]
         });
@@ -141,21 +147,17 @@
 
 
         $('#saveBtn').click(function (e) {
-            e.preventDefault();
-            $(this).html('Sending..');
-            // var datav=$('#productForm').serialize();
-           
-            // alert(datav);
+        e.preventDefault();
+        $(this).html('Sending..');
+      
+        $.ajax({
+            data: $('#productForm').serialize(),
+            url: "{{ route('product.store') }}",
+            type: "POST",
+            dataType: 'json',
+            success: function (data) {
         
-            $.ajax({
-                data: $('#productForm').serialize(),
-                url: "{{ url('product.store')}}",
-                type: "POST",
-                cache: false,
-                contentType: false,
-                processData: false,
-                success: function (data) {
-                    if(data.errors)
+                if(data.errors)
                         {
                             printErrorMsg(data.errors); 
                             // location.reload();
@@ -167,7 +169,7 @@
                             $(".print-error-msg").css('display','none');
                             $('#ajaxModel').modal('hide');
                             table.draw();
-                            alert("done");
+                            alert("Data Added sucessfully");
 
                         }
                    
@@ -177,10 +179,8 @@
                     $('#saveBtn').html('Save Changes');
                     alert(2);
                 }
-
-            });
         });
-
+    });
 
 
 

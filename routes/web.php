@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\PermissionsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,15 +26,11 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::resource('product',ProductController::class);
-Route::post('/productstore', [App\Http\Controllers\HomeController::class, 'store'])->name('productstore');
 
-// Route::controller(App\Http\Controllers\ProductController::class)->group(function(){
+
     
-//     Route::get('export/excel', 'exportExcelFile')->name('export.excel');
-// });
 
-// Route::get('/export-users',[App\Http\Controllers\ProductController::class,'export'])->name('export-users');
+
 
 Route::get('/export-product',[App\Http\Controllers\ProductController::class,'export'])->name('export-product');
 
@@ -53,3 +52,13 @@ Route::get('/fetchall', [EmployeeController::class, 'fetchAll'])->name('fetchAll
 Route::delete('/delete', [EmployeeController::class, 'delete'])->name('delete');
 Route::get('/edit', [EmployeeController::class, 'edit'])->name('edit');
 Route::post('/update', [EmployeeController::class, 'update'])->name('update');
+
+
+
+Route::group(['middleware' => ['auth']], function() {
+    Route::resource('product',ProductController::class);
+    Route::resource('roles', RoleController::class);
+    Route::resource('users', UserController::class);
+    Route::resource('products', ProductController::class);
+    Route::resource('permissions', PermissionsController::class);
+});

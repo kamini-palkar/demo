@@ -26,7 +26,10 @@
                         <button id="exportButton" class="btn btn-primary" style=" margin-right:20px">Export<i class="fa fa-download"></i></button>
 
                        <div class="col-md-12 mb-4 text-right">
-                           <a class="btn btn-success" href="javascript:void(0)" id="createNewProduct"> <i class="fas fa-plus"></i></a>
+                          @can('product-create')
+                            <a class="btn btn-success" href="javascript:void(0)" id="createNewProduct"> 
+                                <i class="fas fa-plus"></i></a>
+                           @endcan
 		               </div> 
                     </div>
                     <div class="col-md-12">
@@ -110,28 +113,9 @@
     </div>
 
 
-     <!-- Container (Contact Section) -->
-     <div id="contact" class="container">
-        <h1 class="text-center" style="margin-top: 100px">Image Upload</h1>
+    
 
-        @if ($message = Session::get('success'))
-            <div class="alert alert-success alert-block">
-                <strong>{{$message}}</strong>
-            </div>
-
-            <img src="{{ asset('images/'.Session::get('image')) }}" />
-        @endif
-
-        <form method="POST" action="{{ route('image.store') }}" enctype="multipart/form-data">
-            @csrf
-            <input type="file" class="form-control" name="image" />
-
-            <button type="submit" class="btn btn-sm">Upload</button>
-        </form>
-
-    </div>
-
-@endsection
+@endsection 
   
 
 

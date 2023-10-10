@@ -17,6 +17,14 @@ use App\Image;
 
 class ProductController extends Controller
 {
+
+    function __construct()
+    {
+         $this->middleware('permission:product-list|product-create|product-edit|product-delete', ['only' => ['index','show']]);
+         $this->middleware('permission:product-create', ['only' => ['create','store']]);
+         $this->middleware('permission:product-edit', ['only' => ['edit','update']]);
+         $this->middleware('permission:product-delete', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -29,21 +37,25 @@ class ProductController extends Controller
         if ($request->ajax()) {
   
             $data = Product::latest()->get();
+            $user = auth()->user();
   
             return Datatables::of($data)
                     ->addIndexColumn()
-                    ->addColumn('image', function ($product) {
-                        return '<img src="' . $product->image . '" width="100" height="100">';
-                    })
-                    ->addColumn('action', function($row){
-   
-                           $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class=" editProduct"><i class="fa fa-edit" style="font-size:24px"></i></a>';
+                    ->addColumn('action', function($row)use ($user){
+                        $btn = '';
+                        if ($user->can('product-edit'))
+                         {
+                            $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class=" editProduct"><i class="fa fa-edit" style="font-size:24px"></i></a>';
+
+                        }
+                        if ($user->can('product-delete'))
+                        {
    
                            $btn = $btn.' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" class=" deleteProduct"><i class="fa fa-trash-o" style="font-size:24px;color:red"></a>';
-    
+                        }
                             return $btn;
                     })
-                    ->rawColumns(['image','action'])
+                    ->rawColumns(['action'])
                     ->make(true);
         }
         
@@ -68,38 +80,20 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'name' => 'required',
-        //     'price' => 'required',
-        // 'details' => 'required',
-           
-        // ]);
-        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
-            'name' => 'required',
-            'price' => 'required|regex:/^\d+(\.\d{1,2})?$/',
-            'details' => 'required',
-            // 'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg'
-        ]);
-        
-        if ($validator->fails())
-        {
-            return response()->json(['errors'=>$validator->errors()->all()]);
-        }
+      
        
       
         Product::updateOrCreate([
-          
-            'id' => $request->product_id
+            'id' => $request->product_id,
         ],
         [
-            
             'name' => $request->name, 
-            'price' => $request->price,
-            'details' => $request->details,
-           
+            'price' => $request->price, 
+            'details' => $request->details
         ]);        
 
-        return response()->json(['success'=>'Product saved successfully.']);
+return response()->json(['success'=>'Record saved successfully.']);
+        // return response()->json(['success'=>'Product saved successfully.']);
     }
 
     /**
