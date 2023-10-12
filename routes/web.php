@@ -57,8 +57,11 @@ Route::post('/update', [EmployeeController::class, 'update'])->name('update');
 
 Route::group(['middleware' => ['auth']], function() {
     Route::resource('product',ProductController::class);
+    Route::post('delete-product', [ProductController::class,'destroy']);
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
+    Route::post('delete-User', [UserController::class,'destroy']);
+    Route::post('delete-role', [RoleController::class,'destroy']);
     Route::resource('products', ProductController::class);
     Route::resource('permissions', PermissionsController::class);
 });

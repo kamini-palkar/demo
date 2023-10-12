@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Yajra\DataTables\Facades\DataTables;
 
 class PermissionsController extends Controller
 {
@@ -15,16 +16,38 @@ class PermissionsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {   
-        $permissions = Permission::all();
+        // $permissions = Permission::all();
 
-        return view('permissions.index', [
-            'permissions' => $permissions
-        ]);
+        // return view('permissions.index', [
+        //     'permissions' => $permissions
+        // ]);
         // $permissions = Permission::latest()->paginate(5);
 
         // return view('permissions.index', compact('permission'));
+
+        if ($request->ajax()) {
+  
+            $permission = Permission::latest()->get();
+           
+  
+            return Datatables::of($permission)
+                    ->addIndexColumn()
+                    ->addColumn('action', function($row){
+                      
+                        
+                            $btn = '<a href="'.route("permissions.edit",$row->id).'" data-toggle="tooltip" title="Show" class=""><span class="icon-size-fullscreen"></span> <i class="fa fa-edit" style="font-size:24px"></i></a>';                       
+   
+                         
+                     
+                            return $btn;
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+        }
+        
+        return view('permissions.index');
     }
 
     /**
@@ -93,11 +116,10 @@ class PermissionsController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Permission $permission)
+    public function destroy( $id)
     {
-        $permission->delete();
-
+        DB::table("permissions")->where('id',$id)->delete();
         return redirect()->route('permissions.index')
-            ->withSuccess(__('Permission deleted successfully.'));
+                        ->with('success','permissions deleted successfully');
     }
 }

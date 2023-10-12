@@ -137,14 +137,12 @@ return response()->json(['success'=>'Record saved successfully.']);
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy( Request $request)
     {
 
-
-        Product::find($id)->delete();
-        
-     
-        return response()->json(['success'=>'Product deleted successfully.']);
+        $com = Product::where('id',$request->id)->delete();
+      
+        return Response()->json($com);
     }
 
     public function export() 

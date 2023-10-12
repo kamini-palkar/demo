@@ -6,9 +6,12 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
-use DB;
+use  App\Models\Model_Has_Roles;
+// use DB;
 use Hash;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Arr;
+use Yajra\DataTables\Facades\DataTables;
     
 class UserController extends Controller
 {
@@ -19,9 +22,39 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $data = User::orderBy('id','DESC')->paginate(5);
-        return view('users.index',compact('data'))
-            ->with('i', ($request->input('page', 1) - 1) * 5);
+    
+
+        if ($request->ajax()) {
+          
+         
+            $data =  User::with('roles:name')->get();
+          
+
+         
+            
+            return Datatables::of($data)
+                    ->addIndexColumn()
+                  
+                    ->addColumn('action', function($row){
+                      
+
+                           $btn = '<a href="'.route("users.show",$row->id).'" data-toggle="tooltip" title="Show" class=""></span> <i class="fa fa-eye"></i></a>';
+
+                            $btn .= '<a href="'.route("users.edit",$row->id).'" data-toggle="tooltip" title="Show" class=""></span> <i class="fa fa-edit" style="font-size:24px"></i></a>';
+
+                        
+                           
+                       
+   
+                            $btn .= '<a href="" data-toggle="tooltip" data-id="'.$row->id.'"  title="Show" class="deleteUser"></span> <i class="fa fa-trash-o" style="font-size:24px;color:red"></i></a>';
+                        
+                            return $btn;
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+        }
+        
+        return view('users.index');
     }
     
     /**
@@ -126,10 +159,13 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy( Request $request)
     {
-        User::find($id)->delete();
-        return redirect()->route('users.index')
-                        ->with('success','User deleted successfully');
+        // User::find($id)->delete();
+        // return redirect()->route('users.index')
+        //                 ->with('success','User deleted successfully');
+        $user = User::where('id',$request->id)->delete();
+      
+        return Response()->json($user);
     }
 }

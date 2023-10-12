@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use DB;
+use Yajra\DataTables\Facades\DataTables;
     
 class RoleController extends Controller
 {
@@ -35,9 +36,40 @@ class RoleController extends Controller
         // return view('roles.index',compact('roles'))
         //     ->with('i', ($request->input('page', 1) - 1) * 5);
 
-        $roles = Role::latest()->paginate(5);
+        // $roles = Role::latest()->paginate(5);
 
-        return view('roles.index', compact('roles'));
+        // return view('roles.index', compact('roles'));
+        if ($request->ajax()) {
+  
+            $role = Role::latest()->get();
+            $user = auth()->user();
+  
+            return Datatables::of($role)
+                    ->addIndexColumn()
+                    ->addColumn('action', function($row)use ($user){
+                        $btn = '';
+                        if ($user->can('role-edit'))
+                         {
+                            $btn = '<a href="'.route("roles.edit",$row->id).'" data-toggle="tooltip" title="Show" class=""><span class="icon-size-fullscreen"></span> <i class="fa fa-edit" style="font-size:24px"></i></a>';
+
+                        }
+                        if($user->can('role-edit'))
+                        {
+   
+                            $btn = $btn.'<a href="'.route("roles.show",$row->id).'" data-toggle="tooltip" title="Show" class="">  <i class="fa fa-eye"></i></a>';
+                        }
+                        if ($user->can('role-delete'))
+                        {
+   
+                            $btn = $btn.'<a href="javascript:void(0)" data-toggle="tooltip" title="delete" class="deleteRole" data-id="'.$row->id.'"><span class="icon-size-fullscreen"></span> <i class="fa fa-trash-o" style="font-size:24px;color:red"></i></a>';
+                        }
+                            return $btn;
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+        }
+        
+        return view('roles.index');
     }
     
     /**
@@ -132,10 +164,13 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        DB::table("roles")->where('id',$id)->delete();
-        return redirect()->route('roles.index')
-                        ->with('success','Role deleted successfully');
+        // DB::table("roles")->where('id',$id)->delete();
+        // return redirect()->route('roles.index')
+        //                 ->with('success','Role deleted successfully');
+        $com = Role::where('id',$request->id)->delete();
+      
+        return Response()->json($com);
     }
 }
