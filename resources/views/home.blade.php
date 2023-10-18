@@ -2,7 +2,7 @@
 @extends('layouts.app')
 
 @section('content')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.1/css/bootstrap.min.css" />
     <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
     <!-- <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" >
@@ -25,11 +25,26 @@
          
         @endif
             <div class="col-md-12">
-                <div class="row">
+
+                    <form action="{{ route('product.import') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <!-- <div class="input-group mb-3">
+                            <input type="file" class="form-control" placeholder="Something clever..">
+                            <div class="input-group-append">
+                            <button class="btn btn-primary" type="button">Import User Data</button>  
+                           
+                            </div>
+                        </div> -->
+                       <div class="row">
+                        <div class="col"><input type="file" class="form-control" name="file"></div>
+                        <div class="col"><button class="btn btn-success">Import User Data</button></div>
+                       </div>
+                
+                    </form>
+                <div class="row mt-3">
                     <!-- <div class="col-md-12">
                         <h4 class="text-center">Laravel 9 Ajax CRUD Tutorial using Datatable - MyWebTuts.com</h4>
                     </div> -->
-                   
           
                     <div class="form-group">
                     <a class="btn btn-primary " href="{{ route('viewpdf') }}"> View PDF <i class="fa fa-eye"></i></a>
@@ -45,6 +60,8 @@
                            @endcan
 		               </div> 
                     </div>
+                  
+
                     <div class="col-md-12">
                         <table class="table table-hover table-bordered data-table table-striped">
                             <thead class="bg-secondary text-white">
@@ -53,7 +70,6 @@
                                     <th>Name</th>
                                     <th>Price</th>
                                     <th>Details</th>
-                                   
                                     <th>Action</th>
                                 </tr>
                             </thead>

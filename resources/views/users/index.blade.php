@@ -22,7 +22,11 @@
           <div class="pull-left">
               <h2>Users Management</h2>
           </div>
+      
           <div class="pull-right">
+          <a class="btn btn-success " href="{{ route('newtcpdf') }}"> PDF <i class="fa fa-download"></i></a>
+          <a class="btn btn-danger " href="{{ route('generatetcpdf') }}"> PDF <i class="fa fa-download"></i></a>
+          <a class="btn btn-primary " href="{{ route('exporttcpdf') }}"> PDF <i class="fa fa-download"></i></a>
               <a class="btn btn-success" href="{{ route('users.create') }}"> <i class="fas fa-plus"></i></a>
           </div>
       </div>

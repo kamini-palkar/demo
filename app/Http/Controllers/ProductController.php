@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
 use PDF;
+use App\Imports\ProductImport;
 use Symfony\Component\HttpFoundation\Response;
 use App\Image;
 
@@ -180,4 +181,12 @@ return response()->json(['success'=>'Record saved successfully.']);
 
 
    } 
+   public function import() 
+   {
+ 
+       Excel::import(new ProductImport,request()->file('file'));
+              
+       return back();
+   }
+ 
 }

@@ -19,7 +19,9 @@
         "barryvdh/laravel-snappy": "^1.0",
         "wemersonjanuario/wkhtmltopdf-windows": "0.12.2.3",
         "spatie/laravel-permission": "^5.11",
-        "laravelcollective/html": "^6.4"
+        "laravelcollective/html": "^6.4",
+        "elibyy/tcpdf-laravel": "^10.0",
+        "simplesoftwareio/simple-qrcode": "^4.2"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
