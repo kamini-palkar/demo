@@ -16,36 +16,37 @@ class PDFController extends Controller
     public function index()
     {
         $pdf = new TCPDF('P', 'mm', array('210', '297'), false, 'UTF-8', false);
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
+        $pdf->SetAutoPageBreak(false, 0);
+        // $pdf->AddFont('Trebuchet MS', '', 'trebuc.ttf');
    
         $pdf->AddPage();
-        $bottomMargin = 10; // Adjust this as needed
-        $pdf->SetAutoPageBreak(true, $bottomMargin);
+        // $pdf->SetFooterMargin(0);
+        // $bottomMargin = 0; // Adjust this as needed
+        // $pdf->SetAutoPageBreak(false, $bottomMargin);
+        // $bMargin = $pdf->getBreakMargin();
+        // $pdf->SetAutoPageBreak(false, 0);
 
-        // $pdf->SetMargins(10, 0,0,1120, true);
-        $borderColor1 = [255, 0, 0];  // Red color (RGB)
-        $borderColor3 = [155,237,255];  // Blue color (RGB)
-         //set border
-        $pdf->SetDrawColor($borderColor3[0], $borderColor3[1], $borderColor3[2]);
-        $pdf->Rect(6, 5, $pdf->getPageWidth() -12, $pdf->getPageHeight() -8);
-        $pdf->SetDrawColor($borderColor1[0], $borderColor1[1], $borderColor1[2]);
-        $pdf->Rect(7, 6, $pdf->getPageWidth() - 14, $pdf->getPageHeight() - 10);
-        $pdf->SetDrawColor($borderColor3[0], $borderColor3[1], $borderColor3[2]);
-        $pdf->Rect(8, 7, $pdf->getPageWidth() -16, $pdf->getPageHeight() -12);
-      
 
-        //image path
-        $imagePath1 = public_path('images/images.jfif');
-        $imagePath2 = public_path('images/down.jfif');
+         //    ---BG IMAGE---
+         $imagePath1 = public_path('images/bg.jpeg');
+         // Use Image() to add the background image
+        //  $pdf->Image($imagePath1, 0, 0, 210, 297, '', '', '', true, 300, '', false, false, 0);
+        $pdf->Image($imagePath1, 0, 0, '210', '297', "JPG", '', 'R', true);
+         $pdf->setPageMark();
+
+        
 
         // Set an image within a cell
-        $pdf->Image($imagePath1, 79, 11, 55, 20);
-        $pdf->SetY(35);
+        // $pdf->Image($imagePath1, 79, 11, 55, 20);
+        $pdf->SetY(33);
         $pdf->SetFont('helvetica', 'BI', 20);
         $pdf->Cell(0, 10, 'Semister Acadmic Report', 0, 1, 'C');
         $pdf->SetDrawColor(0);
         $borderWidth = 0.1;
         $pdf->SetLineWidth($borderWidth);
-        // $pdf->SetY(45);
+        $pdf->SetY(43);
         $pdf->SetFont('helvetica', 'I', 14);
         $pdf->Cell(0, 10, 'Monsoon 2018', 0, 1, 'C');
 
@@ -112,9 +113,10 @@ class PDFController extends Controller
 
        
          // Set an image within a cell
+         $imagePath2 = public_path('images/down.jfif');
         $pdf->Image($imagePath2, 170, 45, 27,36);
        
-        $borderColor2 = [0, 0, 0];  //  color (RGB)
+        // $borderColor2 = [0, 0, 0];  //  color (RGB)
         $columnWidths = [22, 96, 17,17,17,17];
         $alignData=['R','L','C','C','C','C'];
         // Set initial x and y coordinates
@@ -127,9 +129,11 @@ class PDFController extends Controller
         // Create the table header with column names
         foreach ($columnNames as $key=> $name) {
             // $pdf->Cell($columnWidths[$key], 20, $name, 1, 'C');
-            $pdf->MultiCell($columnWidths[$key], 10, $name, $columnBorder[$key], 'C');
+            $pdf->MultiCell($columnWidths[$key], 10, $name, 1, 'C');
+            // $pdf->Rect($x, $y, $columnWidths[$key], 10);
             $x += $columnWidths[$key]; // Increment x for the next MultiCell
             $pdf->SetXY($x, $y); // Set the new coordinates
+            
         }
         $pdf->Ln();
         $pdf->SetFont('helvetica', '', 9);
@@ -185,9 +189,21 @@ class PDFController extends Controller
         $columnBorder=['LB','LB','LB','LB','LB','LRB'];
         $columnNames1 = ['FNDN162', 'UNLEARNING MODULE', 'NC','NC','P','--'];
         foreach ($columnNames1 as $key=> $name) {
-            // $pdf->Cell($columnWidths[$key], 50, $name, 'TLRB','T');
+            // $pdf->Cell($columnWidths[$key], 50, $name, $columnBorder[$key],0,$alignData[$key]);
             // $pdf->Cell($columnWidths[$key], 53, $name, 1, 'T');
             $pdf->MultiCell($columnWidths[$key], 60, $name, $columnBorder[$key], $alignData[$key]);
+            // Left border
+            // $pdf->Rect($x, $y, 0, 60, 'L');
+
+            // // Right border
+            // // $pdf->Rect($x, $y, 0,60, 'L');
+
+            // // Bottom border
+            // $pdf->Rect($x, $y + 60, $columnWidths[$key]+ 1, 0, 'T');
+
+            // $pdf->Rect($x, $y, 0, 60, 'L'); // Left border
+            // $pdf->Rect($x + $columnWidths[$key], $y, 0, 60, 'R'); // Right border
+            // $pdf->Rect($x, $y + 60, $columnWidths[$key], 0, 'B'); // Bottom border
             $x += $columnWidths[$key]; // Increment x for the next MultiCell
             $pdf->SetXY($x, $y); // Set the new coordinates
         }
@@ -200,7 +216,7 @@ class PDFController extends Controller
         $columnWidths1 = [93,93];
         $columnNames1 = ['Semester Grade Point Average (SGPA)', 'Cumulative Grade Point Average (CGPA)' ];
         foreach ($columnNames1 as $key=> $name) {
-            $pdf->Cell($columnWidths1[$key], 7, $name, '1','0','C');
+            $pdf->Cell($columnWidths1[$key], 7, $name, 'TLR','0','C');
            
         }
 
@@ -210,34 +226,39 @@ class PDFController extends Controller
         // Set initial x and y coordinates
           $x = 12;
           $y = 225;
-          $pdf->SetFont('helvetica', '', 9);
+          $pdf->SetFont('helvetica', '', 9.5);
         $columnNames =    
-        ['Earned Credits', 'Earned Credit Points Σ(Credit X Grade Points)', 'SGPA','Total Earned Credits','Total Earned Points','CGPA'];
+        ['Earned Credits', 'Earned Credit Points', 'SGPA','Total \nEarned Credits','Total \nEarned Points','CGPA'];
         $columnFont=['','','B','','','B'];
         $pdf->SetXY(12,225);    
         foreach ($columnNames as $key=> $name) {
             // $pdf->Cell($columnWidths[$key], 20, $name, 1, 'C');
             $pdf->SetFont('helvetica', $columnFont[$key], 10);
+            $pdf->Rect($x, $y, $columnWidths[$key], 10);
             $pdf->MultiCell($columnWidths[$key], 12, $name, 'LR', 'C');
             $x += $columnWidths[$key]; // Increment x for the next MultiCell
             $pdf->SetXY($x, $y); // Set the new coordinates
         }
+       
+        $pdf->SetXY(42,228);
+        $pdf->SetFont('helvetica', '', 7);  
+        $pdf->Cell(0, 5,  'Σ(Credit X Grade Points)', 0, 'C');
+
 
         $x = 12;
         $y = 235;
         $pdf->SetFont('helvetica', '', 9.5);
-        $columnNames =    
-        ['17.0', '44.40', '2.86 Good
-        ','17.0','44.40','2.86 Good'];
-       
+        $columnNames = ['17.0', '44.40', '2.86 Good','17.0','44.40','2.86 Good'];
         $pdf->SetXY(12,235);    
         foreach ($columnNames as $key=> $name) {
-        //     $pdf->SetFont('helvetica', $columnFont[$key], 10);
-        //   $pdf->Cell($columnWidths[$key], 10, $name, 'TLRB',0, 'C');
-        $pdf->SetFont('helvetica', $columnFont[$key], 10);
-        $pdf->MultiCell($columnWidths[$key], 12, $name , 'LRTB', 'C');
-        $x += $columnWidths[$key]; // Increment x for the next MultiCell
-        $pdf->SetXY($x, $y);
+            
+         $pdf->SetFont('helvetica', $columnFont[$key], 10);
+          $pdf->Cell($columnWidths[$key], 10, $name, 'TLRB',0, 'C');
+        // $pdf->SetFont('helvetica', $columnFont[$key], 10);
+        // $pdf->MultiCell($columnWidths[$key], 10, $name , 'LRTB', 'C');
+        // $pdf->Rect($x, $y, $columnWidths[$key], 10);
+        // $x += $columnWidths[$key]; // Increment x for the next MultiCell
+        // $pdf->SetXY($x, $y);
         }
 
 
@@ -245,8 +266,8 @@ class PDFController extends Controller
       $style = array
         (
             'border' => 0,
-            'vpadding' => 'auto',
-            'hpadding' => 'auto',
+            'vpadding' => '0',
+            'hpadding' => '0',
             'fgcolor' => array(0, 0, 0),
             'bgcolor' => false,
             'module_width' => 1,
@@ -255,30 +276,61 @@ class PDFController extends Controller
         );
 
          //  -----QR CODE-----
-        $pdf->write2DBarcode('devharsh pvt ltd', 'QRCODE,L', 12, 253, 30, 28, $style, 'N');
-        $pdf->SetXY(15,276);
-        $pdf->SetFont('helvetica', '', 8);
+        $pdf->write2DBarcode('devharsh pvt ltd', 'QRCODE,L', 12, 255, 21, 20, $style, 'N');
+        $pdf->SetXY(13,275);
+        $pdf->SetFont('Arial', 'I', 8);
         $pdf->Cell(20, 5, 'AFY 00098', 0, 1, 'C');
+        
+        //image path
+        $imagePath1 = public_path('images/signature.jfif');
+        $imagePath2 = public_path('images/signature2.png');
+        $pdf->SetXY(45,255);
+        $pdf->Image($imagePath1, 47, 250, 20, 20);
+        
+        $pdf->Image($imagePath2, 132, 253, 20, 20);
+         
 
-        $pdf->SetXY(45,273);
-        $pdf->SetFont('helvetica', '', 8);
+        $pdf->SetXY(45,272);
+        $pdf->SetFont('Arial', 'I', 8);
         $pdf->Cell(20, 3, 'Jasmine Gohil', 0, 1, 'L');
         $pdf->SetXY(45,276);
-        $pdf->SetFont('helvetica', '', 8);
+        $pdf->SetFont('Arial', 'I', 8);
         $pdf->Cell(20, 3, 'Controller of Examination', 0, 1, 'L');
 
         $pdf->SetXY(134,273);
-        $pdf->SetFont('helvetica', '', 8);
+        $pdf->SetFont('Arial', 'I', 8);
         $pdf->Cell(0, 3, 'Dr. Sridhar B Reddy ', 0, 1, 'L');
         $pdf->SetXY(134,276);
-        $pdf->SetFont('helvetica', '', 8);
+        $pdf->SetFont('Arial', 'I', 8);
         $pdf->Cell(0, 3, 'Registrar', 0, 1, 'L');
 
 
-          
 
 
-        $pdf->Output('user_data_and_roles.pdf');
+
+
+
+
+
+        // $pdf->AddPage();
+
+        // // Set the background image
+        // $backgroundImagePath = public_path('images/bg.jpeg');
+        //     // Set the background image
+        //     $pageWidth = $pdf->getPageWidth();
+        //    $pageHeight = $pdf->getPageHeight();
+
+        //     $pdf->Image($backgroundImagePath, 0, 0,  $pageWidth, $pageHeight, '', '', '', false, 300, '', false, false, 0);
+
+        //     // Set the font and font size
+    
+
+
+
+
+
+
+        $pdf->Output('mark_sheet.pdf');
 
         
     }
