@@ -43,6 +43,7 @@ Route::get('/exporttcpdf', [App\Http\Controllers\UserController::class,'exporttc
 
 Route::get('/generatetcpdf', [App\Http\Controllers\UserController::class,'generatetcpdf'])->name('generatetcpdf');
 Route::get('/newtcpdf', [App\Http\Controllers\PDFController::class,'index'])->name('newtcpdf');
+Route::get('/SDMUniversityTCPDF', [App\Http\Controllers\SDMUniversityController::class,'index'])->name('SDMUniversityTCPDF');
 
 Route::controller(ImageController::class)->group(function(){
     Route::get('/image-upload', 'index')->name('image.form');

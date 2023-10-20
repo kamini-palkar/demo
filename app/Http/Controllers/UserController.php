@@ -43,8 +43,6 @@ class UserController extends Controller
 
                             $btn .= '<a href="'.route("users.edit",$row->id).'" data-toggle="tooltip" title="Show" class=""></span> <i class="fa fa-edit" style="font-size:24px"></i></a>';
 
-                        
-                           
                        
    
                             $btn .= '<a href="" data-toggle="tooltip" data-id="'.$row->id.'"  title="Show" class="deleteUser"></span> <i class="fa fa-trash-o" style="font-size:24px;color:red"></i></a>';
