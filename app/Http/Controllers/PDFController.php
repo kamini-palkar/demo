@@ -19,15 +19,8 @@ class PDFController extends Controller
         $pdf->setPrintHeader(false);
         $pdf->setPrintFooter(false);
         $pdf->SetAutoPageBreak(false, 0);
-        // $pdf->AddFont('Trebuchet MS', '', 'trebuc.ttf');
    
         $pdf->AddPage();
-        // $pdf->SetFooterMargin(0);
-        // $bottomMargin = 0; // Adjust this as needed
-        // $pdf->SetAutoPageBreak(false, $bottomMargin);
-        // $bMargin = $pdf->getBreakMargin();
-        // $pdf->SetAutoPageBreak(false, 0);
-
 
          //    ---BG IMAGE---
          $imagePath1 = public_path('images/bg.jpeg');
@@ -129,7 +122,8 @@ class PDFController extends Controller
         // Create the table header with column names
         foreach ($columnNames as $key=> $name) {
             // $pdf->Cell($columnWidths[$key], 20, $name, 1, 'C');
-            $pdf->MultiCell($columnWidths[$key], 10, $name,$columnBorder[$key], 'C');
+            // $pdf->MultiCell($columnWidths[$key], 10, $name,$columnBorder[$key], 'C');
+            $pdf->MultiCell($columnWidths[$key], 10, $name,$columnBorder[$key], 'C',0, 1, '', '', true, 0, false, true, 10, 'M');
             // $pdf->Rect($x, $y, $columnWidths[$key], 10);
             $x += $columnWidths[$key]; // Increment x for the next MultiCell
             $pdf->SetXY($x, $y); // Set the new coordinates  
@@ -198,10 +192,7 @@ class PDFController extends Controller
         $pdf->SetXY(12,163); 
         foreach ($columnNames1 as $key=> $name) {
             $pdf->Cell($columnWidths[$key], 52, '', $columnBorder[$key],0,$alignData[$key]);
-            // $pdf->Cell($columnWidths[$key], 53, $name, 1, 'T');
-            // $pdf->MultiCell($columnWidths[$key], 62, $name, $columnBorder[$key], $alignData[$key]);
-            // $x += $columnWidths[$key]; // Increment x for the next MultiCell
-            // $pdf->SetXY($x, $y); // Set the new coordinates
+         
         }
 
 
@@ -249,14 +240,10 @@ class PDFController extends Controller
         $columnNames = ["17.0", "44.40", "2.86 \nGood","17.0","44.40","2.86 \nGood"];
         $pdf->SetXY(12,235);    
         foreach ($columnNames as $key=> $name) {
-            
-        //  $pdf->SetFont('helvetica', $columnFont[$key], 10);
-        //   $pdf->Cell($columnWidths[$key], 10, $name, 'TLRB',0, 'C');
         $pdf->SetFont('helvetica', $columnFont[$key], 10);
-        $pdf->MultiCell($columnWidths[$key], 10, $name ,    $columnBorder[$key], 'C');
-        // $pdf->MultiCell($columnWidths[$key], 10, $name, 1, 'J', 1, 0, '', '', true, 0, false, true, 40, 'M');
+        // $pdf->MultiCell($columnWidths[$key], 10, $name ,    $columnBorder[$key], 'C');
+        $pdf->MultiCell($columnWidths[$key], 10, $name,$columnBorder[$key], 'C',0, 1, '', '', true, 0, false, true, 10, 'M');
 
-        // $pdf->Rect($x, $y, $columnWidths[$key], 10);
         $x += $columnWidths[$key]; // Increment x for the next MultiCell
         $pdf->SetXY($x, $y);
         }
@@ -304,68 +291,7 @@ class PDFController extends Controller
         $pdf->SetFont('Arial', 'I', 8);
         $pdf->Cell(0, 3, 'Registrar', 0, 1, 'L');
 
-
-
-
-
-        $pdf->AddPage();
-
-        // Set the font and size
-        $pdf->SetFont('Helvetica', '', 12);
-        
-        // Text to be aligned
-        $text = "Centered Text";
-
-        $columnWidths = [22, 96, 17,17,17,17];
-        $alignData=['R','L','C','C','C','C'];
-        // Set initial x and y coordinates
-          $x = 12;
-          $y = 83;
-          $pdf->SetFont('helvetica', 'BI', 10);
-          $columnBorder=['TLB','TLB','TLB','TLB','TLB','TLRB'];
-        $columnNames = ['Course Code', 'Course', 'Credit Enrolled','Credit Earned','Grade','Grade Point'];
-        $pdf->SetXY(12,83);    
-        // Create the table header with column names
-        foreach ($columnNames as $key=> $name) {
-            if($columnWidths[$key]=='Course'){
-                $cellWidth = 96;
-                $cellHeight = 10;
-
-            }
-           
-            $pdf->MultiCell($columnWidths[$key], 10, $name,$columnBorder[$key], 'C');
-         
-            $x += $columnWidths[$key]; // Increment x for the next MultiCell
-            $pdf->SetXY($x, $y); // Set the new coordinates  
-        }
-        
-        // Calculate the width and height of the multicell
-        $cellWidth = 60;
-        $cellHeight = 30;
-        
-        // Calculate the X and Y coordinates to center the multicell on the page
-        $pageWidth = $pdf->getPageWidth();
-        $pageHeight = $pdf->getPageHeight();
-        $x = ($pageWidth - $cellWidth) / 2;
-        $y = ($pageHeight - $cellHeight) / 2;
-        
-        // Calculate the X and Y coordinates to center the text within the multicell
-        $textWidth = $pdf->GetStringWidth($text);
-        $textHeight = $pdf->getStringHeight($cellWidth, $text);
-        $textX = $x + ($cellWidth - $textWidth) / 2;
-        $textY = $y + ($cellHeight - $textHeight) / 2;
-        
-        // Create the multicell without borders
-        $pdf->MultiCell($cellWidth, $cellHeight, 'we', 1, 'C', 0, 0, $x, $y);
-        
-        // Add the centered text using the Text method
-        $pdf->Text($textX, $textY, $text);
-
-
-
-        $pdf->Output('mark_sheet.pdf');
-
-        
+        $pdf->Output('mark_sheet.pdf');    
     }
 
 
