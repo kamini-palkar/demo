@@ -7,6 +7,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionsController;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -73,6 +74,14 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('permissions', PermissionsController::class);
 
     Route::post('product-import',[ProductController::class, 'import'])->name('product.import');
+    Route::get('marksheet',[App\Http\Controllers\HomeController::class, 'marksheet'])->name('marksheet');
+
+    Route::get('/upload-excel', [App\Http\Controllers\PDFController::class, 'uploadExcel'])->name('upload-excel-form');
+Route::post('/upload-excel', [App\Http\Controllers\PDFController::class, 'uploadExcel'])->name('upload-excel');
+
+
+Route::get('/ANU_DANAMICDATA', [App\Http\Controllers\ANUController::class,'index'])->name('ANU_DANAMICDATA');
+
 });
 
 

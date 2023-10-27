@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 // use PDF;
 use TCPDF;
@@ -67,7 +66,6 @@ class PDFController extends Controller
         $pdf->Cell(45, 5, '26 January 1900', 0, 1, 'L');
 
         $pdf->SetFont('helvetica', 'BI', 10);
-       
         $pdf->Cell(35, 5, 'Batch:', 0, 1, 'R');
 
         $pdf->SetFont('helvetica', 'I', 10);
@@ -194,8 +192,6 @@ class PDFController extends Controller
             $pdf->Cell($columnWidths[$key], 52, '', $columnBorder[$key],0,$alignData[$key]);
          
         }
-
-
         
         $pdf->Ln();
         $pdf->SetFont('helvetica', 'I', 10);
@@ -243,7 +239,6 @@ class PDFController extends Controller
         $pdf->SetFont('helvetica', $columnFont[$key], 10);
         // $pdf->MultiCell($columnWidths[$key], 10, $name ,    $columnBorder[$key], 'C');
         $pdf->MultiCell($columnWidths[$key], 10, $name,$columnBorder[$key], 'C',0, 1, '', '', true, 0, false, true, 10, 'M');
-
         $x += $columnWidths[$key]; // Increment x for the next MultiCell
         $pdf->SetXY($x, $y);
         }
@@ -292,6 +287,22 @@ class PDFController extends Controller
         $pdf->Cell(0, 3, 'Registrar', 0, 1, 'L');
 
         $pdf->Output('mark_sheet.pdf');    
+    }
+
+    public function uploadExcel(Request $request)
+    {
+        // Validate the uploaded file
+        $request->validate([
+            'excel_file' => 'required|mimes:xls,xlsx', // Add any other validation rules as needed
+        ]);
+    
+        // Upload the Excel file to the public folder
+        $file = $request->file('excel_file');
+        $fileName = $file->getClientOriginalName();
+        $file->storeAs('public/excel', $fileName);
+    
+    
+        return redirect()->back()->with('success', 'Excel file uploaded successfully.');
     }
 
 
@@ -356,8 +367,5 @@ class PDFController extends Controller
     {
         //
     }
-
-
-
 
 }

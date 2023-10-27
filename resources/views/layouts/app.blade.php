@@ -67,6 +67,7 @@
                             @endif
                         @else
                         @auth
+                        <li><a class="nav-link" href="{{ route('marksheet') }}"> Marksheet</a></li>
                         @role('Admin')
                                 <li><a class="nav-link" href="{{ route('users.index') }}">Manage Users</a></li>
                                 

@@ -81,7 +81,7 @@ class SDMUniversityController extends Controller
         $pdf->Cell(0, 5, '19DUG001', 0, 1, 'L');
 
         $pdf->SetXY(12,95);
-        $columnBorder=['TLB','TLB','TLB','TLB','TLB','TLB','TLRB'];
+        $columnBorder=['TLB','TLB','TLB','TLB','TLB','TLB','TBRL'];
         $columnWidths = [11, 64, 23,20,23,30,15];
         $columnNames = ['SL.NO', 'SUBJECT', 'UNIVERSITY EXAMINATION','VIVA','INTERNAL ASSESSMENT','TOTAL','REMARK'];
         $pdf->SetFont('helvetica', 'I', 8.5);
@@ -93,8 +93,6 @@ class SDMUniversityController extends Controller
             $pdf->MultiCell($columnWidths[$key], 15, $name,$columnBorder[$key], 'C',0, 1, '', '', true, 0, false, true, 10, 'M');
             $x += $columnWidths[$key]; // Increment x for the next MultiCell
             $pdf->SetXY($x, $y); // Set the new coordinates  
-
-            // $pdf->Cell($columnWidths[$key], 15, $name, 1, 0, 'C', 0, '', '', true, 0, false, true, 11, 'M');
         }
 
         $x = 87;
@@ -404,13 +402,14 @@ class SDMUniversityController extends Controller
 
         $pdf->SetXY(12,230);
         $columnNames = ['Class', 'Distinction', 'First Class','Second Class','Pass only'];
+        $columnBorder=['LB','LB','LB','LB','LBR'];
         // $DataAlign=['C','L','C','C','C','C','C','C','C','C','C','C','C'];
         $pdf->SetFont('helvetica', 'I', 10);
         $x = 12;
         $y = 230;
         foreach ($columnNames as $key=> $name) {
             // $pdf->Cell($columnWidths[$key], 10, $name, $columnBorder[$key], 'C',0, '', '', true, 0, false, true, 11, 'M');
-            $pdf->Cell($columnWidths[$key], 10, $name, 1, 0, 'C', 0, '', '', true, 0, false, true, 10, 'M');
+            $pdf->Cell($columnWidths[$key], 10, $name, $columnBorder[$key], 0, 'C', 0, '', '', true, 0, false, true, 10, 'M');
             // $pdf->MultiCell($columnWidths[$key], 10, $name, $columnBorder[$key], 'C');
             // $x += $columnWidths[$key]; // Increment x for the next MultiCell
             // $pdf->SetXY($x, $y); // Set the new coordinates  
@@ -439,66 +438,7 @@ class SDMUniversityController extends Controller
         $pdf->Cell(10, 2,' SDM College of Dental Sciences and Hospital, Sattur, Dharwad–580009, Karnataka, India', 0, 0,'L');
 
        
-        // $pdf->AddPage();
-        // $pdf->SetFont('helvetica', 'I', 10);
-        // $text = "Veryjhgjh\nGoodjhjh";
-        // //  $pdf->Cell(30, 11, $text, 1, 1, 'C', 0, '', '', true, 0, false, true, 11, 'M');
-         
-
-        //  $pdf->MultiCell(30, 10, $text, 1, 'C',0,1, '', '', true, 0, false, true, 10, 'M');
-
-        //  $pdf->MultiCell(30, 11, '240.70', 1, 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
-
-
-
-        // // Set the width and height of the cell
-        // $cellWidth = 100; // You can adjust this as needed
-        // $cellHeight = 10;
-
-        // // Add content to the PDF with line breaks
-        // $content = "This is some text with\na line break in it.";
-        
-        // // Break the content into lines
-        // $lines = explode("\n", $content);
-
-        // foreach ($lines as $line) {
-        //     $pdf->Cell($cellWidth, $cellHeight, $line, 0, 1);
-        // }
-
-
-        // $pdf->AddPage();
-
-        // // Set the width and height of the cell
-        // $cellWidth = 100; // You can adjust this as needed
-        // $cellHeight = 10;
-
-        // // Add content to the PDF with center-aligned text
-        // $content = "Centered Text in MultiCell";
-        
-        // $pdf->MultiCell($cellWidth, $cellHeight, $content, 1, 'C'); // 
-        // $pdf->AddPage();
-
-        // // Set the width and height of the cell
-        // $cellWidth = 100; // You can adjust this as needed
-        // $cellHeight = 40; // Adjust the height to your needs
-
-        // // Content to be centered vertically
-        // $content = "Vertically Centered Text in MultiCell";
-
-        // // Calculate the vertical alignment position
-        // $verticalAlign = ($cellHeight - $pdf->getStringHeight($cellWidth, $content)) / 2;
-
-        // // Set the Y position for MultiCell to center-align vertically
-        // $pdf->SetXY(10, $verticalAlign);
-
-        // // Add content to the PDF with center-aligned text
-        // $pdf->MultiCell($cellWidth, $cellHeight, $content, 1, 'C');
-
-
-
-
-
-
+       
 
         
         $pdf->Output('SDM_University_mark_sheet.pdf');
