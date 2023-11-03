@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,18 +70,24 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
     Route::post('delete-User', [UserController::class,'destroy']);
+    Route::post('edit', [UserController::class,'update']);
     Route::post('delete-role', [RoleController::class,'destroy']);
     Route::resource('products', ProductController::class);
     Route::resource('permissions', PermissionsController::class);
 
     Route::post('product-import',[ProductController::class, 'import'])->name('product.import');
     Route::get('marksheet',[App\Http\Controllers\HomeController::class, 'marksheet'])->name('marksheet');
+    Route::get('mail',[App\Http\Controllers\HomeController::class, 'mail'])->name('mail');
 
     Route::get('/upload-excel', [App\Http\Controllers\PDFController::class, 'uploadExcel'])->name('upload-excel-form');
-Route::post('/upload-excel', [App\Http\Controllers\PDFController::class, 'uploadExcel'])->name('upload-excel');
+    Route::post('/upload-excel', [App\Http\Controllers\PDFController::class, 'uploadExcel'])->name('upload-excel');
 
 
-Route::get('/ANU_DANAMICDATA', [App\Http\Controllers\ANUController::class,'index'])->name('ANU_DANAMICDATA');
+    Route::get('/ANU_DANAMICDATA', [App\Http\Controllers\ANUController::class,'index'])->name('ANU_DANAMICDATA');
+
+    // Route::get('/send-mail', [MailController::class, 'index'])->name('send-mail');
+    // Route::post('/User_Mail', [App\Http\Controllers\MailController::class, 'UserMail'])->name('User_Mail');
+
 
 });
 

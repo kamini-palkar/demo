@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 use Maatwebsite\Excel\Facades\Excel;
 use TCPDF;
-
 use Illuminate\Http\Request;
 
 class ANUController extends Controller
@@ -14,11 +13,12 @@ class ANUController extends Controller
         $pdf->setPrintFooter(false);
         $pdf->SetAutoPageBreak(false, 0);
 
-        $path = storage_path('app/public/excel/anu_645.xlsx');
+        $path = public_path('excel/anu_645.xlsx');
+        // dd($path);
         $data = Excel::toArray([], $path);
         $sheetData = $data[0];
-        // echo '<pre>';
-        // print_r($sheetData);
+        echo '<pre>';
+        print_r($sheetData);
         // dd($sheetData);
         foreach ( $sheetData as $index => $Studentdata) {
                 if ($index == 0) {
@@ -111,48 +111,62 @@ class ANUController extends Controller
                     $x += $columnWidths[$key]; // Increment x for the next MultiCell
                     $pdf->SetXY($x, $y); // Set the new coordinates  
                 }
-
+                $x=12;$y=93;
                 $pdf->SetFont('helvetica', 'I', 9);
                 $pdf->SetXY(12,93);  
                 $columnNames1 = [$Studentdata[30], $Studentdata[31], $Studentdata[32],$Studentdata[33],$Studentdata[34],$Studentdata[35]];
                 $columnBorder=['L','L','L','L','L','LR'];
-        
                 foreach ($columnNames1 as $key=> $name) {
-                    // $pdf->Cell($columnWidths[$key], 10, $name, 'LR', 'C');
-                    $pdf->Cell($columnWidths[$key], 10, $name, $columnBorder[$key], 0, $alignData[$key]);
+                    // $pdf->Cell($columnWidths[$key], 10, $name, $columnBorder[$key], 0, $alignData[$key]);
+                    $pdf->MultiCell($columnWidths[$key], 10, $name,$columnBorder[$key], $alignData[$key],0, 1, '', '', true, 0, false, true, 10, 'M');
+                    $x += $columnWidths[$key]; // Increment x for the next MultiCell
+                    $pdf->SetXY($x, $y); // Set the new coordinate
                 }
-
+                $x=12;$y=103;
                 $pdf->SetXY(12,103);  
                 $columnNames1 = [$Studentdata[36], $Studentdata[37], $Studentdata[38],$Studentdata[39],$Studentdata[40],$Studentdata[41]];
                 foreach ($columnNames1 as $key=> $name) {
-                    $pdf->Cell($columnWidths[$key], 10, $name, $columnBorder[$key],0, $alignData[$key]);
+                    // $pdf->Cell($columnWidths[$key], 10, $name, $columnBorder[$key],0, $alignData[$key]);
+                    $pdf->MultiCell($columnWidths[$key], 10, $name,$columnBorder[$key], $alignData[$key],0, 1, '', '', true, 0, false, true, 10, 'M');
+                    $x += $columnWidths[$key]; // Increment x for the next MultiCell
+                    $pdf->SetXY($x, $y); // Set the new coordinate
                 }
-                $pdf->Ln();
+                $x=12;$y=113;
                 $pdf->SetXY(12,113);  
                 $columnNames1 = [$Studentdata[42], $Studentdata[43], $Studentdata[44],$Studentdata[45],$Studentdata[46],$Studentdata[47]];
                 foreach ($columnNames1 as $key=> $name) {
-                    $pdf->Cell($columnWidths[$key], 10, $name, $columnBorder[$key],0, $alignData[$key]);
+                    // $pdf->Cell($columnWidths[$key], 10, $name, $columnBorder[$key],0, $alignData[$key]);
+                    $pdf->MultiCell($columnWidths[$key], 10, $name,$columnBorder[$key], $alignData[$key],0, 1, '', '', true, 0, false, true, 10, 'M');
+                    $x += $columnWidths[$key]; // Increment x for the next MultiCell
+                    $pdf->SetXY($x, $y); // Set the new coordinate
                 }
-
-                $pdf->Ln();
+                $x=12;$y=123;
                 $pdf->SetXY(12,123);  
                 $columnNames1 = [$Studentdata[48], $Studentdata[49], $Studentdata[50],$Studentdata[51],$Studentdata[52],$Studentdata[53]];
                 foreach ($columnNames1 as $key=> $name) {
-                    $pdf->Cell($columnWidths[$key], 10, $name, $columnBorder[$key],0, $alignData[$key]);
+                    // $pdf->Cell($columnWidths[$key], 10, $name, $columnBorder[$key],0, $alignData[$key]);
+                    $pdf->MultiCell($columnWidths[$key], 10, $name,$columnBorder[$key], $alignData[$key],0, 1, '', '', true, 0, false, true, 10, 'M');
+                    $x += $columnWidths[$key]; // Increment x for the next MultiCell
+                    $pdf->SetXY($x, $y); // Set the new coordinate
                 } 
-
-                $pdf->Ln();
+                $x=12;$y=133;
                 $pdf->SetXY(12,133);  
                 $columnNames1 = [$Studentdata[54], $Studentdata[55], $Studentdata[56],$Studentdata[57],$Studentdata[58],$Studentdata[59]];
                 foreach ($columnNames1 as $key=> $name) {
-                    $pdf->Cell($columnWidths[$key], 10, $name, $columnBorder[$key],0, $alignData[$key]);
+                    // $pdf->Cell($columnWidths[$key], 10, $name, $columnBorder[$key],0, $alignData[$key]);
+                    $pdf->MultiCell($columnWidths[$key], 10, $name,$columnBorder[$key], $alignData[$key],0, 1, '', '', true, 0, false, true, 10, 'M');
+                    $x += $columnWidths[$key]; // Increment x for the next MultiCell
+                    $pdf->SetXY($x, $y); // Set the new coordinate
                 }
 
-                $pdf->Ln();
+                $x=12; $y=143;
                 $pdf->SetXY(12,143);  
                 $columnNames1 = [$Studentdata[60], $Studentdata[61], $Studentdata[62],$Studentdata[63],$Studentdata[64],$Studentdata[65]];
                 foreach ($columnNames1 as $key=> $name) {
-                    $pdf->Cell($columnWidths[$key], 10, $name, $columnBorder[$key],0, $alignData[$key]);
+                    // $pdf->Cell($columnWidths[$key], 10, $name, $columnBorder[$key],0, $alignData[$key]);
+                    $pdf->MultiCell($columnWidths[$key], 10, $name,$columnBorder[$key], $alignData[$key],0, 1, '', '', true, 0, false, true, 10, 'M');
+                    $x += $columnWidths[$key]; // Increment x for the next MultiCell
+                    $pdf->SetXY($x, $y); // Set the new coordinate
                 }
 
                 $x=12;$y=153;
@@ -232,7 +246,6 @@ class ANUController extends Controller
                 $columnNames1 = ['Semester Grade Point Average (SGPA)', 'Cumulative Grade Point Average (CGPA)' ];
                 foreach ($columnNames1 as $key=> $name) {
                     $pdf->Cell($columnWidths1[$key], 7, $name, 'TLR','0','C');
-                
                 }
 
                 $columnWidths = [27, 35, 31,31,31,31];
@@ -252,7 +265,7 @@ class ANUController extends Controller
                 }
 
                 $pdf->SetXY(40,232);
-                $pdf->SetFont('helvetica', 'I', 8);  
+                $pdf->SetFont('helvetica', 'I', 7);  
                 $pdf->Cell(0, 3,  'Σ(Credit X Grade Points)', 0, 'C');
 
                 $x = 12; $y = 236;
@@ -279,7 +292,6 @@ class ANUController extends Controller
                     // width of a single module in points
                     'module_height' => 1 // height of a single module in points
                 );
-
                 //  -----QR CODE-----
                 $pdf->write2DBarcode($Studentdata[128], 'QRCODE,L', 12, 255, 21, 20, $style, 'N');
                 $pdf->SetXY(13,275);
@@ -293,7 +305,6 @@ class ANUController extends Controller
                 $pdf->SetFont('Arial', 'I', 8);
                 $pdf->Cell(20, 3, $Studentdata[134], 0, 1, 'L');
 
-
                 $pdf->SetXY(134,273);
                 $pdf->SetFont('Arial', 'I', 8);
                 $pdf->Cell(0, 3, $Studentdata[135], 0, 1, 'L');
@@ -305,11 +316,8 @@ class ANUController extends Controller
                 $imagePath2 = public_path('images/Signature-PNG-Image-File.png');
                 $pdf->SetXY(45,255);
                 $pdf->Image($imagePath1, 47, 250, 20, 20);
-                
                 $pdf->Image($imagePath2, 132, 253, 20, 20);
         }
-  
         $pdf->Output($Studentdata[127]);  
-    } 
-          
+    }         
 }

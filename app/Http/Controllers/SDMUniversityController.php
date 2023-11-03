@@ -1,10 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
-
-// use PDF;
 use TCPDF;
 
 class SDMUniversityController extends Controller
@@ -408,7 +405,6 @@ class SDMUniversityController extends Controller
         $x = 12;
         $y = 230;
         foreach ($columnNames as $key=> $name) {
-            // $pdf->Cell($columnWidths[$key], 10, $name, $columnBorder[$key], 'C',0, '', '', true, 0, false, true, 11, 'M');
             $pdf->Cell($columnWidths[$key], 10, $name, $columnBorder[$key], 0, 'C', 0, '', '', true, 0, false, true, 10, 'M');
             // $pdf->MultiCell($columnWidths[$key], 10, $name, $columnBorder[$key], 'C');
             // $x += $columnWidths[$key]; // Increment x for the next MultiCell

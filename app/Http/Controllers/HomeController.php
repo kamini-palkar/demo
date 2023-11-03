@@ -31,6 +31,10 @@ class HomeController extends Controller
     {
         return view('marksheet');
     }
+    public function mail()
+    {
+        return view('email.mail');
+    }
 
 
 

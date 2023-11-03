@@ -5,6 +5,7 @@
 
         <div class="pull-right">
           <a class="btn btn-success " href="{{ route('ANU_DANAMICDATA') }}"> AN_University <i class="fa fa-download"></i></a>
+          <!-- <a class="btn btn-danger " href="{{ route('send-mail') }}"> Send Mail <i class="fa fa-envelope"></i></a> -->
          
          </div>
          <br> <br>
@@ -17,12 +18,13 @@
                         enctype="multipart/form-data">
                         @csrf
                         <input type="file" name="excel_file"
-                            class="form-control">
+                            class="form-control" required>
                         <br>
                         <button class="btn btn-success">
-                            Import Student Data
+                           Make PDF File
                         </button>
-                     
+                        
+                
                     </form>
                 </div>
             </div>
