@@ -76,7 +76,7 @@ class MailController extends Controller
        else{
         $email = $request->input('email');
         $accessToken = $request->input('access_token');
-        dd($accessToken);
+        // dd($accessToken);
 
         // $file = $request->file('user_file');
       

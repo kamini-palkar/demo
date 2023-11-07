@@ -15,6 +15,8 @@ use PDF;
 use App\Imports\ProductImport;
 use Symfony\Component\HttpFoundation\Response;
 use App\Image;
+use App\Http\Controllers\API\BaseController as BaseController;
+use App\Http\Resources\Product as ProductResource;
 
 class ProductController extends Controller
 {
@@ -34,10 +36,10 @@ class ProductController extends Controller
    
     public function index(Request $request)
     {
- 
+        $data = Product::latest()->get();
         if ($request->ajax()) {
   
-            $data = Product::latest()->get();
+           
             $user = auth()->user();
   
             return Datatables::of($data)
@@ -61,6 +63,7 @@ class ProductController extends Controller
         }
         
         return view('home');
+        // return $this->sendResponse(ProductResource::collection($data), 'Products retrieved successfully.');
     }
 
     /**
@@ -81,7 +84,17 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-      
+        $input = $request->all();
+   
+        $validator = Validator::make($input, [
+            'name' => 'required',
+            'price' => 'required',
+            'details' => 'required'
+        ]);
+   
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors());       
+        }
        
       
         Product::updateOrCreate([
@@ -93,8 +106,9 @@ class ProductController extends Controller
             'details' => $request->details
         ]);        
 
-return response()->json(['success'=>'Record saved successfully.']);
-        // return response()->json(['success'=>'Product saved successfully.']);
+      
+        return response()->json(['success'=>'Product saved successfully.']);
+       
     }
 
     /**
@@ -117,6 +131,9 @@ return response()->json(['success'=>'Record saved successfully.']);
     public function edit($id)
     {
         $product = Product::find($id);
+        if (is_null($product)) {
+            return $this->sendError('Product not found.');
+        }
         return response()->json($product);
     }
 

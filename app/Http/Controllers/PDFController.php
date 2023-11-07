@@ -8,6 +8,7 @@ use TCPDF;
 use App\Models\Student_data;
 use DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB as FacadesDB;
 
 class PDFController extends Controller
 {
@@ -618,7 +619,7 @@ class PDFController extends Controller
                  $data=['unique_id'=>$unique_id,'firstname'=>$firstname,'lastname'=>$lastname];
                 // Student_data::create($data);
                 // print_r($data);
-                DB::table('student_data')->insert($data);
+                FacadesDB::table('student_data')->insert($data);
         }   
         $pdf->Output($Studentdata[127]);  
 
@@ -629,6 +630,21 @@ class PDFController extends Controller
 
     
         // return redirect()->back()->with('success', 'Excel file uploaded successfully.');
+    }
+
+
+    public function getData($unique_id){
+       
+     
+          $data = Student_data::where('unique_id', $unique_id)->get();
+    
+          if ($data->count() === 0) {
+              return response()->json(['message' => 'Data not found'], 404);
+          }
+          
+          return response()->json($data);
+       
+
     }
 
 
