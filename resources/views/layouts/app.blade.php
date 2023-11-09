@@ -67,6 +67,7 @@
                             @endif
                         @else
                         @auth
+                        <li><a class="nav-link" href="{{ route('user') }}"> User</a></li>
                         <li><a class="nav-link" href="{{ route('mail') }}"> Mail</a></li>
                         <li><a class="nav-link" href="{{ route('marksheet') }}"> Marksheet</a></li>
 
